@@ -1,20 +1,26 @@
 "use client";
-import salvarTarefa from "@/backend/casos-uso/salvar-tarefa";
-import { useState } from "react";
+
+import TarefaLista from "./components/tarefa-lista";
+import TarefaForm from "./components/tarefa-form";
+import useTarefas from "./hooks/use-tarefas";
 
 export default function Home() {
-  const [tarefa, setTarefa] = useState<any>(null);
-
-  async function click() {
-    const novaTarefa = await salvarTarefa({})
-    setTarefa(novaTarefa)
-  }
+  
+  const { adicionar, alternarConclusao, excluir, tarefas} = useTarefas()
 
   return (
-    <div>
+    <div className="flex flex-col gap-6 p-6 ">
       <h1>Lista de Tarefas</h1>
-      <button onClick={click} className="bg-blue-500 p-2">Adicionar Tarefa</button>
-      {tarefa && <p>{tarefa.nome}</p>}
+
+      <TarefaForm salvar={adicionar}/>
+
+      <TarefaLista
+        tarefas={tarefas}
+        excluir={excluir}
+        alternarConclusao={alternarConclusao}
+      />
+
+      
     </div>
   );
 }

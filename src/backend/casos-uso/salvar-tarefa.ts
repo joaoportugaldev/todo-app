@@ -1,11 +1,19 @@
 "use server";
 import { Tarefa } from "@/core/model/Tarefa";
 import Id from "@/core/utils/Id";
+import RepositorioTarefa from "../db/RepositorioTarefa";
 
 export default async function salvarTarefa(tarefa: Tarefa) {
-    return {
-        id: Id.gerar(),
-        nome: 'Tarefa 1',
-        concluida: false
+
+    if (!tarefa.nome) {
+        throw new Error('Nome da tarefa é obrigatório')
     }
+
+    const repo = new RepositorioTarefa()
+
+    return await repo.inserir({
+        id: Id.gerar(),
+        nome: tarefa.nome,
+        concluida: tarefa.concluida
+    })
 }
